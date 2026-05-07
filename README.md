@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Gudgumz
 
 > Made from sap. Made to age. Made to return.
@@ -110,3 +111,6 @@ Noun-based entities, not generic e-commerce slugs.
 ## License
 
 UNLICENSED. © Gudgumz Private Limited. All rights reserved.
+=======
+# gudgumz_1
+>>>>>>> 3900be38d7457ccd8994f3b1bc3ac771202be8db

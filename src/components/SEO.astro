@@ -1,0 +1,116 @@
+---
+/**
+ * <SEO /> — the meta tag engine.
+ *
+ * Drop into <head> in BaseLayout. Handles:
+ *   - title, description, canonical
+ *   - Open Graph (Facebook, WhatsApp, LinkedIn link previews)
+ *   - Twitter cards
+ *   - Robots directives
+ *   - Language + locale
+ *   - Article/Product metadata when applicable
+ */
+import { SITE, absoluteUrl } from '@lib/site';
+
+export interface Props {
+  title: string;
+  description?: string;
+  canonical?: string;
+  image?: string;
+  imageAlt?: string;
+  type?: 'website' | 'article' | 'product';
+  publishedTime?: string;
+  modifiedTime?: string;
+  author?: string;
+  noindex?: boolean;
+  keywords?: string[];
+}
+
+const {
+  title,
+  description = SITE.description,
+  canonical,
+  image = SITE.defaultOgImage,
+  imageAlt = `${SITE.name} — ${SITE.positioning}`,
+  type = 'website',
+  publishedTime,
+  modifiedTime,
+  author,
+  noindex = false,
+  keywords,
+} = Astro.props;
+
+const fullTitle =
+  title === SITE.name ? `${SITE.name} — ${SITE.positioning}` : `${title} — ${SITE.name}`;
+
+const canonicalUrl = canonical
+  ? canonical.startsWith('http')
+    ? canonical
+    : absoluteUrl(canonical)
+  : absoluteUrl(Astro.url.pathname);
+
+const ogImageUrl = image.startsWith('http') ? image : absoluteUrl(image);
+---
+
+<!-- Primary -->
+<title>{fullTitle}</title>
+<meta name="description" content={description} />
+<link rel="canonical" href={canonicalUrl} />
+{keywords && keywords.length > 0 && <meta name="keywords" content={keywords.join(', ')} />}
+
+<!-- Robots -->
+<meta
+  name="robots"
+  content={noindex
+    ? 'noindex, nofollow'
+    : 'index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1'}
+/>
+<meta name="googlebot" content={noindex ? 'noindex, nofollow' : 'index, follow'} />
+
+<!-- Language & locale -->
+<meta http-equiv="content-language" content={SITE.language} />
+<meta name="language" content="English" />
+<meta name="geo.region" content="IN-KL" />
+<meta name="geo.placename" content="Kanjirappally, Kerala" />
+<meta name="geo.position" content={`${SITE.geo.latitude};${SITE.geo.longitude}`} />
+<meta name="ICBM" content={`${SITE.geo.latitude}, ${SITE.geo.longitude}`} />
+
+<!-- Open Graph -->
+<meta property="og:type" content={type} />
+<meta property="og:site_name" content={SITE.name} />
+<meta property="og:title" content={fullTitle} />
+<meta property="og:description" content={description} />
+<meta property="og:url" content={canonicalUrl} />
+<meta property="og:image" content={ogImageUrl} />
+<meta property="og:image:alt" content={imageAlt} />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="og:locale" content={SITE.locale} />
+
+{type === 'article' && publishedTime && (
+  <meta property="article:published_time" content={publishedTime} />
+)}
+{type === 'article' && modifiedTime && (
+  <meta property="article:modified_time" content={modifiedTime} />
+)}
+{type === 'article' && author && (
+  <meta property="article:author" content={author} />
+)}
+
+<!-- Twitter -->
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content={fullTitle} />
+<meta name="twitter:description" content={description} />
+<meta name="twitter:image" content={ogImageUrl} />
+<meta name="twitter:image:alt" content={imageAlt} />
+
+<!-- Brand-specific signals -->
+<meta name="author" content={author ?? SITE.legalName} />
+<meta name="publisher" content={SITE.legalName} />
+<meta name="copyright" content={`© ${new Date().getFullYear()} ${SITE.legalName}`} />
+<meta name="theme-color" content="#1c1a17" />
+<meta name="color-scheme" content="light" />
+
+<!-- Performance hints -->
+<meta name="format-detection" content="telephone=no" />
+<meta name="referrer" content="strict-origin-when-cross-origin" />

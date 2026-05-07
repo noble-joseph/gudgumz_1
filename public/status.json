@@ -1,0 +1,25 @@
+{
+  "$schema": "https://gudgumz.com/schema/status.json",
+  "updatedAt": "2025-01-15T00:00:00+05:30",
+  "currentBatch": "2025-01-A",
+  "latexContentPercent": 96.4,
+  "dispatchTimeHours": 48,
+  "averageWhatsAppReplyMinutes": 15,
+  "stockStatus": {
+    "flexiboot": "in-stock",
+    "growpouch": "in-stock",
+    "latex-gloves": "in-stock",
+    "sanitary-socks": "in-stock"
+  },
+  "production": {
+    "tappingSeasonOpen": true,
+    "lastBatchProducedAt": "2025-01-10",
+    "workshopLocation": "Kanjirappally, Kerala"
+  },
+  "shipping": {
+    "domesticAvailable": true,
+    "internationalAvailable": false,
+    "freeShippingThreshold": 1500,
+    "currency": "INR"
+  }
+}

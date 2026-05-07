@@ -1,0 +1,32 @@
+---
+/**
+ * <JsonLd /> — type-safe structured data injector.
+ *
+ * Usage:
+ *   <JsonLd schema={organizationSchema()} />
+ *   <JsonLd schemas={[orgSchema, breadcrumbSchema(crumbs)]} />
+ *
+ * Renders inside <head> via <Fragment slot="head">.
+ */
+import type { Thing, WithContext } from 'schema-dts';
+
+type Schema = WithContext<Thing> | Record<string, unknown>;
+
+interface Props {
+  schema?: Schema;
+  schemas?: Schema[];
+}
+
+const { schema, schemas } = Astro.props;
+const all: Schema[] = schemas ?? (schema ? [schema] : []);
+---
+
+{
+  all.map((s) => (
+    <script
+      type="application/ld+json"
+      set:html={JSON.stringify(s, null, 0)}
+      is:inline
+    />
+  ))
+}
